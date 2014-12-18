@@ -38,7 +38,12 @@ shinyServer(function(input, output, session) {
                 f <- decompose(ds_ts)
                 plot(f)
         })
-     
+        
+        output$diacPlot <- renderPlot({
+                dc_ts <- arima(getDataset(), order=c(1,0,1))
+                tsdiag(dc_ts)
+        })
+        
         
 ## new UI with Radio Buttons
 
@@ -65,7 +70,7 @@ shinyServer(function(input, output, session) {
                                         fit <- tbats(getDataset(), use.parallel=TRUE)
                                 
                                 if(input$model=="STL")
-                                        fit <- stl(getDataset(), s.window="periodic")
+                                        fit <- stl(log(getDataset()), s.window="periodic")
                 
                 plot(forecast(fit, h=input$ahead))
                 

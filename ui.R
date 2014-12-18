@@ -48,6 +48,7 @@ shinyUI(fluidPage(theme = "styles.css",
                 tabsetPanel(
                         tabPanel("Chosen Model", plotOutput("plot")),
                         tabPanel("Timeseries Decomposition", plotOutput("dcompPlot")),
+                        tabPanel("Diagnostic Checking", plotOutput("diacPlot")),
                         tabPanel("Model Explanations", verbatimTextOutput("summary"))
                 )
         
