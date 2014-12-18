@@ -8,7 +8,7 @@ library(zoo)
 library(rmarkdown)
 
 # Define UI 
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = "styles.css",
         
         # Application title
         headerPanel("Portfolio Traffic Forecasting"),
