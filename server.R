@@ -1,9 +1,11 @@
 library(shiny)
+library(shinyIncubator)
 library(zoo)
 library(timeDate)
 library(datasets)
 library(forecast)
 library(zoo)
+library(knitr)
 library(rmarkdown)
 
 source("data.R")
@@ -65,29 +67,18 @@ shinyServer(function(input, output, session) {
                                         fit <- stl(getDataset(), s.window="periodic")
                 
                 plot(forecast(fit, h=input$ahead))
+                
+                ## Generating pdf report
+                output$report = downloadHandler(
+                        filename = "myreport.pdf",
+                        
+                        content = function(file) {
+                                out = knit2pdf("input.Rnw", clean = TRUE)
+                                file.rename(out, file) # move pdf to file for downloading
+                        },
+                        
+                        contentType = "application/pdf"
+                )
         })
 
-## Downloadable file
-
-        downloadFileType <- reactive({
-        input$downloadFileType  
-        })
-
-        # Include a downloadable file of the plot in the output list.
-        output$downloadPlot <- downloadHandler(
-        filename = function() {
-                paste("Website: ", input$variable, "with" , input$model, "Forecasting", downloadFileType(), sep="-")   
-        },
-        # The argument content below takes filename as a function
-        # and returns what"s printed to it.
-        content = function(con) {
-                # Gets the name of the function to use from the 
-                # downloadFileType reactive element. Example:
-                # returns function pdf() if downloadFileType == "pdf".
-                plotFunction <- match.fun(downloadFileType())
-                plotFunction(con)
-                        print(plot(fit))
-                dev.off(which=dev.cur())
-        }
-        )
 })

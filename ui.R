@@ -5,6 +5,7 @@ library(timeDate)
 library(datasets)
 library(forecast)
 library(zoo)
+library(knitr)
 library(rmarkdown)
 
 # Define UI 
@@ -31,25 +32,15 @@ shinyUI(fluidPage(theme = "styles.css",
                 br(),
                 br(),
                 # Button to allow the user to save the image.
-                selectInput(
-                        inputId = "downloadFileType",
-                        label   = "Select Download File Type",
-                        choices = list(
-                                "JPEG" = "jpeg",
-                                "PDF" = "pdf",
-                                "PNG" = "png",
-                                "BMP" = "bmp")),
-                br(),
-                downloadButton(
-                        outputId = "downloadPlot", 
-                        label    = "Download Plot"),
+                
+                downloadButton('report'),
                 
                 progressInit(),
+                
         width = 3),
         
         
-        
-        # Show the caption and forecast plots
+        # Show forecast plots
         mainPanel(
                 #h4(textOutput("caption")),
                 
