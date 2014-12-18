@@ -11,7 +11,7 @@ library(rmarkdown)
 shinyUI(fluidPage(theme = "styles.css",
         
         # Application title
-        headerPanel("Portfolio Traffic Forecasting"),
+        titlePanel("Website Traffic Forecasting"),
         
         sidebarLayout(
         
@@ -44,14 +44,14 @@ shinyUI(fluidPage(theme = "styles.css",
                         outputId = "downloadPlot", 
                         label    = "Download Plot"),
                 
-                progressInit()
-        ),
+                progressInit(),
+        width = 3),
         
         
         
         # Show the caption and forecast plots
         mainPanel(
-                h4(textOutput("caption")),
+                #h4(textOutput("caption")),
                 
                 tabsetPanel(
                         tabPanel("Chosen Model", plotOutput("plot")),
@@ -61,4 +61,5 @@ shinyUI(fluidPage(theme = "styles.css",
         
         )
         )
+        
 ))

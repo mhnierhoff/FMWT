@@ -26,9 +26,9 @@ shinyServer(function(input, output, session) {
                 }
         })
         
-        output$caption <- renderText({
-                paste("Website: ", input$variable)
-        })
+        #output$caption <- renderText({
+        #        paste("Website: ", input$variable)
+        #})
         
         output$dcompPlot <- renderPlot({
                 ds_ts <- ts(getDataset(), frequency=12)
