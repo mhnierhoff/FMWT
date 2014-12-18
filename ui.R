@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyIncubator)
+library(shinyapps)
 library(zoo)
 library(timeDate)
 library(datasets)
