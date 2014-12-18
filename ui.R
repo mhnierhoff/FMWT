@@ -38,7 +38,7 @@ shinyUI(fluidPage(theme = "styles.css",
                 
                 progressInit(),
                 
-        width = 3),
+                width = 3),
         
         
         # Show forecast plots
@@ -50,9 +50,9 @@ shinyUI(fluidPage(theme = "styles.css",
                         tabPanel("Timeseries Decomposition", plotOutput("dcompPlot")),
                         tabPanel("Diagnostic Checking", plotOutput("diacPlot")),
                         tabPanel("Model Explanations", verbatimTextOutput("summary"))
-                )
+                ),
         
-        )
+        width = 6)
         )
         
 ))
