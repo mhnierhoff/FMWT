@@ -13,6 +13,8 @@ shinyUI(fluidPage(theme = "styles.css",
         # Application title
         headerPanel("Portfolio Traffic Forecasting"),
         
+        sidebarLayout(
+        
         # Sidebar with controls to select the dataset and forecast ahead duration
         sidebarPanel(
                 selectInput("variable", "Website:",
@@ -49,7 +51,7 @@ shinyUI(fluidPage(theme = "styles.css",
         
         # Show the caption and forecast plots
         mainPanel(
-                #h4(textOutput("caption")),
+                h4(textOutput("caption")),
                 
                 tabsetPanel(
                         tabPanel("Chosen Model", plotOutput("plot")),
@@ -57,5 +59,6 @@ shinyUI(fluidPage(theme = "styles.css",
                         tabPanel("Model Explanations", verbatimTextOutput("summary"))
                 )
         
+        )
         )
 ))
