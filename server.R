@@ -13,41 +13,51 @@ source("data.R")
 
 
 shinyServer(function(input, output, session) {
-        
+                
         getDataset <- reactive({
-                if (input$variable=="cologne")
-                {
-                        return(cologne)
-                }
-                else if (input$variable=="A")
-                {
-                        return(A)
-                }
-                else
-                {
-                        return(B)
-                }
+                switch(input$variable,
+                       "cologne" = cologne,
+                       "A" = A,
+                       "B" = B)
+                
         })
         
+        getModel <- reactive({
+                switch(input$model,
+                       "ETS" = ets(getDataset()),
+                       "ARIMA" = auto.arima(getDataset()),
+                       "TBATS" = tbats(getDataset(), use.parallel=TRUE),
+                       "STL" = stl(log(getDataset(), s.window="periodic")))
+        })
+                
         #output$caption <- renderText({
         #        paste("Website: ", input$variable)
         #})
         
-        output$dcompPlot <- renderPlot({
+        plotDcomp <- function() {
                 ds_ts <- ts(getDataset(), frequency=12)
                 f <- decompose(ds_ts)
                 plot(f)
+        }
+        
+        output$dcompPlot <- renderPlot({
+                plotDcomp()
         })
         
-        output$diacPlot <- renderPlot({
+        plotDiac <- function() {
                 dc_ts <- arima(getDataset(), order=c(1,0,1))
                 tsdiag(dc_ts)
+        }
+        
+        output$diacPlot <- renderPlot({
+                plotDiac()
         })
         
+        plotInput <- function() {
+                plot(forecast(getModel(), h=input$ahead))
+        }
         
-## new UI with Radio Buttons
-
-        output$plot <- renderPlot({
+        output$fmplot <- renderPlot({
                 
                 withProgress(session, {
                         setProgress(message = "Calculating, please wait",
@@ -60,31 +70,20 @@ shinyServer(function(input, output, session) {
                         
                 })
                 
-                                if(input$model=="ETS")
-                                        fit <- ets(getDataset())
-                                
-                                if(input$model=="ARIMA")
-                                        fit <- auto.arima(getDataset())
-                                
-                                if(input$model=="TBATS")
-                                        fit <- tbats(getDataset(), use.parallel=TRUE)
-                                
-                                if(input$model=="STL")
-                                        fit <- stl(log(getDataset()), s.window="periodic")
+                plotInput()
                 
-                plot(forecast(fit, h=input$ahead))
-                
-                ## Generating pdf report
-                output$report = downloadHandler(
-                        filename = "myreport.pdf",
-                        
-                        content = function(file) {
-                                out = knit2pdf("input.Rnw", clean = TRUE)
-                                file.rename(out, file) # move pdf to file for downloading
-                        },
-                        
-                        contentType = "application/pdf"
-                )
         })
-
+        
+        output$downloadPlot <- downloadHandler(
+                filename = function() { 
+                        paste(input$variable, input$model,"Traffic-Forecasting",Sys.Date(),sep="-", ".pdf") 
+                        },
+                content <- function(file) {
+                        pdf(file)
+                        plotInput()
+                        plotDiac()
+                        plotDcomp()
+                dev.off()
+                }
+        )
 })

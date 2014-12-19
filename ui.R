@@ -41,10 +41,9 @@ shinyUI(fluidPage(#theme = "styles.css",
                 
                 
                 tags$div(
-                        downloadButton('report'),
+                        downloadButton("downloadPlot", "Download Model Plot"),
                         align = "center"
                         ),
-                
                 
                 progressInit(),
                 
@@ -54,13 +53,12 @@ shinyUI(fluidPage(#theme = "styles.css",
         
         # Show forecast plots
         mainPanel(
-                #h4(textOutput("caption")),
                 
                 tabsetPanel(
-                        tabPanel("Chosen Model", plotOutput("plot")),
+                        tabPanel("Chosen Model", plotOutput("fmplot")),
                         tabPanel("Timeseries Decomposition", plotOutput("dcompPlot")),
                         tabPanel("Diagnostic Checking", plotOutput("diacPlot")),
-                        tabPanel("Model Explanations", verbatimTextOutput("summary"))
+                        tabPanel("Explanations", includeMarkdown("models.md"))
                 ),
         
         width = 6)
