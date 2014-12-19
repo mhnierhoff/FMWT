@@ -10,7 +10,7 @@ library(knitr)
 library(rmarkdown)
 
 # Define UI 
-shinyUI(fluidPage(theme = "styles.css",
+shinyUI(fluidPage(#theme = "styles.css",
         
         # Application title
         titlePanel("Website Traffic Forecasting"),
@@ -19,24 +19,35 @@ shinyUI(fluidPage(theme = "styles.css",
         
         # Sidebar with controls to select the dataset and forecast ahead duration
         sidebarPanel(
-                selectInput("variable", "Website:",
-                            list("Köln" = "cologne", 
-                                 "A" = "A",
-                                 "B" = "B")),
-                br(),
-                radioButtons(inputId = "model",
-                             label = "Select Forecasting Model:",
-                             choices = c("ARIMA", "ETS", "TBATS", "STL"),
-                             selected = "ARIMA"),
-                br(),
-                numericInput("ahead", "Months to Forecast Ahead:", 12),
-                br(),
-                br(),
+                
+                wellPanel(
+                        selectInput("variable", "Website:",
+                        list("Köln" = "cologne", 
+                                "A" = "A",
+                                "B" = "B"))
+                ),
+                wellPanel(
+                        radioButtons(inputId = "model",
+                        label = "Select Forecasting Model:",
+                        choices = c("ARIMA", "ETS", "TBATS", "STL"),
+                        selected = "ARIMA")
+                ),
+                
+                wellPanel(
+                        numericInput("ahead", "Months to Forecast Ahead:", 12)
+                ),
+                
                 # Button to allow the user to save the image.
                 
-                downloadButton('report'),
+                
+                tags$div(
+                        downloadButton('report'),
+                        align = "center"
+                        ),
+                
                 
                 progressInit(),
+                
                 
                 width = 3),
         
