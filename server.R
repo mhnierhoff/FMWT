@@ -15,7 +15,7 @@ source("data.R")
 shinyServer(function(input, output, session) {
                 
         getDataset <- reactive({
-                switch(input$variable,
+                switch(input$page,
                        "cologne" = cologne,
                        "A" = A,
                        "B" = B)
@@ -27,16 +27,26 @@ shinyServer(function(input, output, session) {
                        "ETS" = ets(getDataset()),
                        "ARIMA" = auto.arima(getDataset()),
                        "TBATS" = tbats(getDataset(), use.parallel=TRUE),
-                       "STL" = stl(log(getDataset(), s.window="periodic")))
+                       "StructTS" = StructTS(getDataset(), "level"),
+                       "Holt-Winters" = HoltWinters(getDataset(), gamma=FALSE))
         })
-                
-        #output$caption <- renderText({
-        #        paste("Website: ", input$variable)
-        #})
+        
+        output$caption1 <- renderText({
+                paste("The web traffic of", input$page, "with", input$model, "Forecasting")
+        })
+        
+        output$caption2 <- renderText({
+                paste("The web traffic of", input$page, 
+                      "decomposed into seasonal, trend and irregular components using loess (acronym STL).")
+        })
+        
+        output$caption3 <- renderText({
+                paste("The web traffic of", input$page, "with", input$model, "Forecasting")
+        })
         
         plotDcomp <- function() {
                 ds_ts <- ts(getDataset(), frequency=12)
-                f <- decompose(ds_ts)
+                f <- stl(ds_ts, s.window="periodic", robust=TRUE)
                 plot(f)
         }
         
@@ -76,13 +86,13 @@ shinyServer(function(input, output, session) {
         
         output$downloadPlot <- downloadHandler(
                 filename = function() { 
-                        paste(input$variable, input$model,"Traffic-Forecasting",Sys.Date(),sep="-", ".pdf") 
+                        paste(input$page, input$model,"Traffic-Forecasting",Sys.Date(),sep="-", ".pdf") 
                         },
                 content <- function(file) {
                         pdf(file)
                         plotInput()
-                        plotDiac()
                         plotDcomp()
+                        plotDiac()
                 dev.off()
                 }
         )

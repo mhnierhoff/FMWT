@@ -10,7 +10,7 @@ library(knitr)
 library(rmarkdown)
 
 # Define UI 
-shinyUI(fluidPage(#theme = "styles.css",
+shinyUI(fluidPage(
         
         # Application title
         titlePanel("Website Traffic Forecasting"),
@@ -21,7 +21,7 @@ shinyUI(fluidPage(#theme = "styles.css",
         sidebarPanel(
                 
                 wellPanel(
-                        selectInput("variable", "Website:",
+                        selectInput("page", "Website:",
                         list("Köln" = "cologne", 
                                 "A" = "A",
                                 "B" = "B"))
@@ -29,10 +29,10 @@ shinyUI(fluidPage(#theme = "styles.css",
                 wellPanel(
                         radioButtons(inputId = "model",
                         label = "Select Forecasting Model:",
-                        choices = c("ARIMA", "ETS", "TBATS", "STL"),
+                        choices = c("ARIMA", "ETS", "TBATS", "StructTS", "Holt-Winters"),
                         selected = "ARIMA")
                 ),
-                
+
                 wellPanel(
                         numericInput("ahead", "Months to Forecast Ahead:", 12)
                 ),
@@ -55,8 +55,13 @@ shinyUI(fluidPage(#theme = "styles.css",
         mainPanel(
                 
                 tabsetPanel(
-                        tabPanel("Chosen Model", plotOutput("fmplot")),
-                        tabPanel("Timeseries Decomposition", plotOutput("dcompPlot")),
+                        tabPanel("Selected Model", 
+                                 plotOutput("fmplot"),
+                                 tags$div(textOutput("caption1"), align = "center")),
+                                 
+                        tabPanel("STL Decomposition", 
+                                 plotOutput("dcompPlot"),
+                                 tags$div(textOutput("caption2"), align = "center")),
                         tabPanel("Diagnostic Checking", plotOutput("diacPlot")),
                         tabPanel("Explanations", includeMarkdown("models.md"))
                 ),
