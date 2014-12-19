@@ -1,3 +1,17 @@
+################# ~~~~~~~~~~~~~~~~~ ######## ~~~~~~~~~~~~~~~~~ #################
+##                                                                            ##
+##                   Forecasting Models for Website Traffic                   ##
+##                                                                            ##            
+##                    App & Code by Maximilian H. Nierhoff                    ##
+##                                                                            ##
+##                           http://nierhoff.info                             ##
+##                                                                            ##                     
+##         Live version of this app: https://nierhoff.shinyapps.io/FMWT       ##
+##                                                                            ##
+##         Github Repo for this app: https://github.com/mhnierhoff/FMWT       ##
+##                                                                            ##
+################# ~~~~~~~~~~~~~~~~~ ######## ~~~~~~~~~~~~~~~~~ #################
+
 library(shiny)
 library(shinyIncubator)
 library(shinyapps)
@@ -26,10 +40,13 @@ shinyUI(fluidPage(
                                 "A" = "A",
                                 "B" = "B"))
                 ),
+                
                 wellPanel(
                         radioButtons(inputId = "model",
                         label = "Select Forecasting Model:",
-                        choices = c("ARIMA", "ETS", "TBATS", "StructTS", "Holt-Winters"),
+                        choices = c("ARIMA", "ETS", "TBATS", 
+                                    "StructTS", "Holt-Winters", 
+                                    "Theta", "Neural Network"),
                         selected = "ARIMA")
                 ),
 
@@ -39,15 +56,16 @@ shinyUI(fluidPage(
                 
                 # Button to allow the user to save the image.
                 
+               
+                        p("By clicking on the button a plot of the selected 
+                          forecasting model and both decomposition plots can 
+                          be downloaded."),
+                tags$div(downloadButton("downloadPlot", "Download Model Plot"),
+                         align = "center"),
                 
-                tags$div(
-                        downloadButton("downloadPlot", "Download Model Plot"),
-                        align = "center"
-                        ),
                 
                 progressInit(),
-                
-                
+        
                 width = 3),
         
         
@@ -55,14 +73,27 @@ shinyUI(fluidPage(
         mainPanel(
                 
                 tabsetPanel(
-                        tabPanel("Selected Model", 
+                        tabPanel("Model Plot", 
                                  plotOutput("fmplot"),
-                                 tags$div(textOutput("caption1"), align = "center")),
-                                 
-                        tabPanel("STL Decomposition", 
-                                 plotOutput("dcompPlot"),
-                                 tags$div(textOutput("caption2"), align = "center")),
-                        tabPanel("Diagnostic Checking", plotOutput("diacPlot")),
+                                 tags$strong(textOutput("caption1"), 
+                                          align = "center")),
+                        
+                        tabPanel("Forecasting Data",
+                                 tags$div(textOutput("caption2"), 
+                                          align = "left"),
+                                 tags$br(),
+                                 verbatimTextOutput("fmtable")),
+                        
+                        tabPanel("Decomposition Plots",
+                                 tags$div(strong("STL Decomposition"), 
+                                          align ="center"),
+                                 plotOutput("STLdcomp"),
+                                 textOutput("caption3"),
+                                 tags$hr(),
+                                 plotOutput("Ndcomp"),
+                                 (textOutput("caption4")),
+                                 tags$hr()),
+                        
                         tabPanel("Explanations", includeMarkdown("models.md"))
                 ),
         
