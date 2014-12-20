@@ -29,11 +29,9 @@ source("data.R")
 
 shinyServer(function(input, output, session) {
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
         
-##########       Getting the data for the websites         ##
-        
-        ################# ~~~~~~~~~~~~~~~~~ #################        
+## Getting the data for the websites         
 
         getDataset <- reactive({
                 switch(input$page,
@@ -44,11 +42,9 @@ shinyServer(function(input, output, session) {
         })
 
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
 
-##########       Creation of the forecasting models        ##
-
-        ################# ~~~~~~~~~~~~~~~~~ ################# 
+## Creation of the forecasting models        
 
         getModel <- reactive({
                 switch(input$model,
@@ -58,15 +54,16 @@ shinyServer(function(input, output, session) {
                        "StructTS" = StructTS(getDataset(), "level"),
                        "Holt-Winters" = HoltWinters(getDataset(), gamma=FALSE),
                        "Theta" = thetaf(getDataset()),
-                       "Neural Network" = nnetar(getDataset()))
+                       "Random Walk" = rwf(getDataset()),
+                       "Naive" = naive(getDataset()),
+                       "Mean" = meanf(getDataset()),
+                       "Cubic Spline" = splinef(getDataset()))
         })
 
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
-        ##
-##########         Caption creation for tabpanels          ##
-        ##
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+        
+## Caption creation for tabpanels          
         
 
         output$caption1 <- renderText({
@@ -94,11 +91,9 @@ shinyServer(function(input, output, session) {
         })
 
         
-        ################# ~~~~~~~~~~~~~~~~~ #################
-        ##
-##########       STL Timeseries Decomposition Plot         ##
-        ##
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+        
+## STL Timeseries Decomposition Plot         
 
         plotSTLdcomp <- function() {
                 ds_ts <- ts(getDataset(), frequency=12)
@@ -110,11 +105,9 @@ shinyServer(function(input, output, session) {
                 plotSTLdcomp()
         })
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
-        ##
-##########       Normal Timeseries Decomposition Plot      ##
-        ##
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+        
+## Normal Timeseries Decomposition Plot    
 
         plotNdcomp <- function() {
                 ds_ts <- ts(getDataset(), frequency=12)
@@ -128,14 +121,12 @@ shinyServer(function(input, output, session) {
 
 
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
-        ##
-##########         Forecasting model plot creation         ##
-        ##
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+                                                        
+## Forecasting model plot creation                       
            
         plotInput <- function() {
-                plot(forecast(getModel(), h=input$ahead))
+                plot(forecast(getModel(), h=input$ahead),flty = 3)
         }
         
         output$fmplot <- renderPlot({
@@ -156,12 +147,9 @@ shinyServer(function(input, output, session) {
                 
         })
 
+############################### ~~~~~~~~~~~~~~~~~ ##############################
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
-
-##########        Forecasting model table creation         ##
-
-        ################# ~~~~~~~~~~~~~~~~~ #################
+## Forecasting model table creation         
 
         tableInput <- function() {
                 forecast(getModel(), h=input$ahead)
@@ -186,11 +174,9 @@ shinyServer(function(input, output, session) {
         })
 
 
-        ################# ~~~~~~~~~~~~~~~~~ #################
+############################### ~~~~~~~~~~~~~~~~~ ##############################
 
-##########              PDF Download Handler               ##
-
-        ################# ~~~~~~~~~~~~~~~~~ #################
+## PDF Download Handler             
 
         output$downloadPlot <- downloadHandler(
                 filename = function() { 

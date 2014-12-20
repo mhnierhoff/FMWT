@@ -46,7 +46,9 @@ shinyUI(fluidPage(
                         label = "Select Forecasting Model:",
                         choices = c("ARIMA", "ETS", "TBATS", 
                                     "StructTS", "Holt-Winters", 
-                                    "Theta", "Neural Network"),
+                                    "Theta", "Cubic Spline",
+                                    "Random Walk", "Naive",
+                                    "Mean"),
                         selected = "ARIMA")
                 ),
 
