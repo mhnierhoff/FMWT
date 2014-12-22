@@ -26,6 +26,7 @@ library(rmarkdown)
 # Define UI 
 shinyUI(fluidPage(
         
+        tags$head(includeScript("ga-fmwt.js")),
         # Application title
         titlePanel("Website Traffic Forecasting"),
         
@@ -35,21 +36,31 @@ shinyUI(fluidPage(
         sidebarPanel(
                 
                 wellPanel(
-                        selectInput("page", "Website:",
-                        list("Köln" = "cologne", 
-                                "A" = "A",
-                                "B" = "B"))
+                        selectInput(inputId = "page", 
+                                    label = "Website:",
+                                    #br(),
+                                    choices= c("cologne", "A", "B"),
+                                    selected = "cologne")
                 ),
                 
                 wellPanel(
-                        radioButtons(inputId = "model",
-                        label = "Select Forecasting Model:",
-                        choices = c("ARIMA", "ETS", "TBATS", 
-                                    "StructTS", "Holt-Winters", 
-                                    "Theta", "Cubic Spline",
-                                    "Random Walk", "Naive",
-                                    "Mean"),
-                        selected = "ARIMA")
+                        selectInput(inputId = "model",
+                                    label = "Select Forecasting Model:",
+                                    #br(),
+                                    choices = c("ARIMA", "ETS", "TBATS", 
+                                                "StructTS", "Holt-Winters", 
+                                                "Theta", "Cubic Spline",
+                                                "Random Walk", "Naive",
+                                                "Mean"),
+                                    selected = "ARIMA")
+                        #radioButtons(inputId = "model",
+                        #label = "Select Forecasting Model:",
+                        #choices = c("ARIMA", "ETS", "TBATS", 
+                         #           "StructTS", "Holt-Winters", 
+                         #           "Theta", "Cubic Spline",
+                         #           "Random Walk", "Naive",
+                         #           "Mean"),
+                        #selected = "ARIMA")
                 ),
 
                 wellPanel(
