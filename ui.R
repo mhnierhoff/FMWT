@@ -19,7 +19,6 @@ library(zoo)
 library(timeDate)
 library(datasets)
 library(forecast)
-library(zoo)
 library(knitr)
 library(rmarkdown)
 
@@ -31,21 +30,28 @@ shinyUI(fluidPage(
         titlePanel("Website Traffic Forecasting"),
         
         sidebarLayout(
-        
-        # Sidebar with controls to select the dataset and forecast ahead duration
+
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+## Sidebar with controls to select the dataset and forecast ahead duration
         sidebarPanel(
                 
                 wellPanel(
                         selectInput(inputId = "page", 
-                                    label = "Website:",
+                                    label = "Select a website:",
                                     #br(),
-                                    choices= c("cologne", "A", "B"),
-                                    selected = "cologne")
+                                    choices= c("spotted.de","meckr.net",
+                                               "womenweb.de","kochrezepte.de",
+                                               "spontacts.com","autoinfo.de",
+                                               "hoccer.com","einfachlotto.de",
+                                               "yasni.de","tape.tv", 
+                                               "merkando.de", "make.tv",
+                                               "ferien-touristik.de","dailyme.de"),
+                                    selected = "spotted.de")
                 ),
                 
                 wellPanel(
                         selectInput(inputId = "model",
-                                    label = "Select Forecasting Model:",
+                                    label = "Select a forecasting model:",
                                     #br(),
                                     choices = c("ARIMA", "ETS", "TBATS", 
                                                 "StructTS", "Holt-Winters", 
@@ -53,43 +59,36 @@ shinyUI(fluidPage(
                                                 "Random Walk", "Naive",
                                                 "Mean"),
                                     selected = "ARIMA")
-                        #radioButtons(inputId = "model",
-                        #label = "Select Forecasting Model:",
-                        #choices = c("ARIMA", "ETS", "TBATS", 
-                         #           "StructTS", "Holt-Winters", 
-                         #           "Theta", "Cubic Spline",
-                         #           "Random Walk", "Naive",
-                         #           "Mean"),
-                        #selected = "ARIMA")
                 ),
 
                 wellPanel(
-                        numericInput("ahead", "Months to Forecast Ahead:", 12)
+                        numericInput("ahead", "Months to forecast ahead:", 12)
                 ),
                 
-                # Button to allow the user to save the image.
+############################### ~~~~~~~~~~~~~~~~~ ##############################                
+## Option to download the Forecasting model plot & both decomposition plots
                 
-               
                         p("By clicking on the button a plot of the selected 
                           forecasting model and both decomposition plots can 
                           be downloaded."),
                 tags$div(downloadButton("downloadPlot", "Download Model Plot"),
                          align = "center"),
                 
-                
-                progressInit(),
-        
                 width = 3),
         
         
-        # Show forecast plots
+############################### ~~~~~~~~~~~~~~~~~ ##############################        
+## Show Forecasting Plots
+
         mainPanel(
                 
                 tabsetPanel(
                         tabPanel("Model Plot", 
                                  plotOutput("fmplot"),
                                  tags$strong(textOutput("caption1"), 
-                                          align = "center")),
+                                          align = "center"),
+                                 tags$div("Historical Data: Alexa.com | Metric: 
+                                 Alexa Traffic Rank - Global", align="center")),
                         
                         tabPanel("Forecasting Data",
                                  tags$div(textOutput("caption2"), 

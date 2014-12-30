@@ -12,7 +12,6 @@
 ##                                                                            ##
 ################# ~~~~~~~~~~~~~~~~~ ######## ~~~~~~~~~~~~~~~~~ #################
 
-
 library(shiny)
 library(shinyIncubator)
 library(shinyapps)
@@ -20,12 +19,10 @@ library(zoo)
 library(timeDate)
 library(datasets)
 library(forecast)
-library(zoo)
 library(knitr)
 library(rmarkdown)
 
 source("data.R")
-
 
 shinyServer(function(input, output, session) {
 
@@ -35,9 +32,20 @@ shinyServer(function(input, output, session) {
 
         getDataset <- reactive({
                 switch(input$page,
-                       "cologne" = cologne,
-                       "A" = A,
-                       "B" = B)
+                       "spotted.de" = alexaTrafficRank[,2],
+                       "meckr.net" = alexaTrafficRank[,3],
+                       "womenweb.de" = alexaTrafficRank[,4],
+                       "kochrezepte.de" = alexaTrafficRank[,5],
+                       "spontacts.com" = alexaTrafficRank[,6],
+                       "autoinfo.de" = alexaTrafficRank[,7],
+                       "hoccer.com" = alexaTrafficRank[,8],
+                       "einfachlotto.de" = alexaTrafficRank[,9],
+                       "yasni.de" = alexaTrafficRank[,10],
+                       "tape.tv" = alexaTrafficRank[,11],
+                       "merkando.de" = alexaTrafficRank[,12],
+                       "make.tv" = alexaTrafficRank[,13],
+                       "ferien-touristik.de" = alexaTrafficRank[,14],
+                       "dailyme.de" = alexaTrafficRank[,15])
                 
         })
 
@@ -132,16 +140,26 @@ shinyServer(function(input, output, session) {
         output$fmplot <- renderPlot({
                 
                 ##########    Adding a progress bar  ##########
-                withProgress(session, {
-                        setProgress(message = "Calculating, please wait",
-                                    detail = "This may take a few moments...")
-                        Sys.sleep(1)
-                        setProgress(detail = "Still working...")
-                        Sys.sleep(1)
-                        setProgress(detail = "Almost there...")
-                        Sys.sleep(1)
+                # Create a Progress object
+                progress <- shiny::Progress$new()
+                
+                on.exit(progress$close())
+                
+                progress$set(message = "Creating Plot", value = 0)
+                
+                n <- 10
+                
+                for (i in 1:n) {
+                        # Each time through the loop, add another row of data. This is
+                        # a stand-in for a long-running computation.
                         
-                })
+                        # Increment the progress bar, and update the detail text.
+                        progress$inc(1/n, detail = paste("Doing part", i))
+                        
+                        # Pause for 0.1 seconds to simulate a long computation.
+                        Sys.sleep(0.1)
+                }
+                
                 
                 plotInput()
                 
@@ -158,16 +176,26 @@ shinyServer(function(input, output, session) {
         output$fmtable <- renderPrint({
         
                 ##########    Adding a progress bar  ##########
-                withProgress(session, {
-                        setProgress(message = "Calculating, please wait",
-                                    detail = "This may take a few moments...")
-                        Sys.sleep(1)
-                        setProgress(detail = "Still working...")
-                        Sys.sleep(1)
-                        setProgress(detail = "Almost there...")
-                        Sys.sleep(1)
+                ##########    Adding a progress bar  ##########
+                # Create a Progress object
+                progress <- shiny::Progress$new()
                 
-                })
+                on.exit(progress$close())
+                
+                progress$set(message = "Creating Table", value = 0)
+                
+                n <- 10
+                
+                for (i in 1:n) {
+                        # Each time through the loop, add another row of data. This is
+                        # a stand-in for a long-running computation.
+                        
+                        # Increment the progress bar, and update the detail text.
+                        progress$inc(1/n, detail = paste("Doing part", i))
+                        
+                        # Pause for 0.1 seconds to simulate a long computation.
+                        Sys.sleep(0.1)
+                }
         
                 tableInput()
         

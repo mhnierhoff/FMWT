@@ -12,11 +12,15 @@
 ##                                                                            ##
 ################# ~~~~~~~~~~~~~~~~~ ######## ~~~~~~~~~~~~~~~~~ #################
 
-## test data
-cgn <- read.csv("./dataset/Cologne.csv", 
+library(forecast)
+library(lubridate)
+
+dat <- read.csv("./dataset/Historical_Traffic.csv", 
                     header = TRUE,
                     sep=";")
 
-cologne <- ts(cgn[,2], start=1900, end=2013, frequency=1)
+aTR <- na.omit(dat) 
 
-write.csv(cologne, 'data.csv')
+alexaTrafficRank <- ts(aTR, start=c(2014, yday("2014-07-01")), frequency=365.25)
+
+write.csv(alexaTrafficRank, "data.csv")
