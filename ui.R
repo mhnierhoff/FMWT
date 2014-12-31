@@ -32,7 +32,9 @@ shinyUI(fluidPage(
         sidebarLayout(
 
 ############################### ~~~~~~~~~~~~~~~~~ ##############################
+
 ## Sidebar with controls to select the dataset and forecast ahead duration
+        
         sidebarPanel(
                 
                 wellPanel(
@@ -62,10 +64,11 @@ shinyUI(fluidPage(
                 ),
 
                 wellPanel(
-                        numericInput("ahead", "Months to forecast ahead:", 12)
+                        numericInput("ahead", "Days to forecast ahead:", 30)
                 ),
                 
 ############################### ~~~~~~~~~~~~~~~~~ ##############################                
+
 ## Option to download the Forecasting model plot & both decomposition plots
                 
                         p("By clicking on the button a plot of the selected 
@@ -78,6 +81,7 @@ shinyUI(fluidPage(
         
         
 ############################### ~~~~~~~~~~~~~~~~~ ##############################        
+
 ## Show Forecasting Plots
 
         mainPanel(
@@ -88,7 +92,10 @@ shinyUI(fluidPage(
                                  tags$strong(textOutput("caption1"), 
                                           align = "center"),
                                  tags$div("Historical Data: Alexa.com | Metric: 
-                                 Alexa Traffic Rank - Global", align="center")),
+                                 Alexa Traffic Rank - Global", align="center",
+                                 br(),
+                                 "Forecast based on data from 
+                                 27.06.2014 - 21.12.2014")),
                         
                         tabPanel("Forecasting Data",
                                  tags$div(textOutput("caption2"), 

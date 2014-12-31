@@ -81,7 +81,7 @@ shinyServer(function(input, output, session) {
         
         output$caption2 <- renderText({
                 paste("The data of the forecasted next", input$ahead, 
-                      "months of the website", input$page, "with the", 
+                      "days of the website", input$page, "with the", 
                       input$model, "forecasting model.")
         })
 
@@ -134,13 +134,21 @@ shinyServer(function(input, output, session) {
 ## Forecasting model plot creation                       
            
         plotInput <- function() {
-                plot(forecast(getModel(), h=input$ahead),flty = 3)
+                x <- forecast(getModel(), h=input$ahead)
+                plot(x, flty = 3, axes = FALSE)
+                a <- seq(as.Date(aTR$Date, format = "%d.%m.%y")[1] + 1, 
+                         by = "months", length = length(date) + 11)
+                axis(1, at = as.numeric(a)/365.3 + 1970, 
+                     labels = format(a, format = "%d/%m/%Y"), cex.axis = 0.9)
+                axis(2, cex.axis = 0.9, las = 2)
         }
         
         output$fmplot <- renderPlot({
                 
                 ##########    Adding a progress bar  ##########
-                # Create a Progress object
+                
+                ## Create a Progress object
+                
                 progress <- shiny::Progress$new()
                 
                 on.exit(progress$close())
@@ -156,12 +164,14 @@ shinyServer(function(input, output, session) {
                         # Increment the progress bar, and update the detail text.
                         progress$inc(1/n, detail = paste("Doing part", i))
                         
+                        plotInput()
+                        
                         # Pause for 0.1 seconds to simulate a long computation.
                         Sys.sleep(0.1)
                 }
                 
                 
-                plotInput()
+                #plotInput()
                 
         })
 
@@ -175,7 +185,6 @@ shinyServer(function(input, output, session) {
 
         output$fmtable <- renderPrint({
         
-                ##########    Adding a progress bar  ##########
                 ##########    Adding a progress bar  ##########
                 # Create a Progress object
                 progress <- shiny::Progress$new()

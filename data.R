@@ -21,6 +21,6 @@ dat <- read.csv("./dataset/Historical_Traffic.csv",
 
 aTR <- na.omit(dat) 
 
-alexaTrafficRank <- ts(aTR, start=c(2014, yday("2014-07-01")), frequency=365.25)
+alexaTrafficRank <- ts(aTR, start=c(2014, yday("2014-06-27")), frequency=365.3)
 
 write.csv(alexaTrafficRank, "data.csv")
