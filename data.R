@@ -5,12 +5,13 @@
 ##                    App & Code by Maximilian H. Nierhoff                    ##
 ##                                                                            ##
 ##                           http://nierhoff.info                             ##
-##                                                                            ##                     
+##                                                                            ##
 ##         Live version of this app: https://nierhoff.shinyapps.io/FMWT       ##
 ##                                                                            ##
 ##         Github Repo for this app: https://github.com/mhnierhoff/FMWT       ##
 ##                                                                            ##
 ################# ~~~~~~~~~~~~~~~~~ ######## ~~~~~~~~~~~~~~~~~ #################
+
 
 library(forecast)
 library(lubridate)
