@@ -25,7 +25,7 @@ library(rmarkdown)
 # Define UI 
 shinyUI(fluidPage(
         
-        tags$head(includeScript("ga-fmwt.js")),
+        # tags$head(includeScript("ga-fmwt.js")),
         # Application title
         titlePanel("Website Traffic Forecasting"),
         
