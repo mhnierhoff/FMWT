@@ -16,12 +16,16 @@
 library(forecast)
 library(lubridate)
 
-dat <- read.csv("./dataset/Historical_Traffic.csv", 
-                    header = TRUE,
-                    sep=";")
+cgn <- read.csv("./dataset/Cologne.csv", header = TRUE, sep=";")
 
-aTR <- na.omit(dat) 
+cologne <- ts(cgn[,2], start=1900, end=2013, frequency=1)
 
-alexaTrafficRank <- ts(aTR, start=c(2014, yday("2014-06-27")), frequency=365.3)
+write.csv(cologne, "./dataset/data1.csv")
 
-write.csv(alexaTrafficRank, "data.csv")
+############################### ~~~~~~~~~~~~~~~~~ ##############################
+
+ber <- read.csv("./dataset/Berlin.csv", header = TRUE, sep=";")
+
+berlin <- ts(ber[,2], start=1900, end=2013, frequency=1)
+
+write.csv(berlin, "./dataset/data2.csv")

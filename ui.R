@@ -25,9 +25,8 @@ library(rmarkdown)
 # Define UI 
 shinyUI(fluidPage(
         
-        # tags$head(includeScript("ga-fmwt.js")),
         # Application title
-        titlePanel("Website Traffic Forecasting"),
+        titlePanel("Forecasting App - Example Data"),
         
         sidebarLayout(
 
@@ -35,20 +34,12 @@ shinyUI(fluidPage(
 
 ## Sidebar with controls to select the dataset and forecast ahead duration
         
-        sidebarPanel(
-                
+        sidebarPanel( 
                 wellPanel(
-                        selectInput(inputId = "page", 
-                                    label = "Select a website:",
-                                    #br(),
-                                    choices= c("spotted.de","meckr.net",
-                                               "womenweb.de","kochrezepte.de",
-                                               "spontacts.com","autoinfo.de",
-                                               "hoccer.com","einfachlotto.de",
-                                               "yasni.de","tape.tv", 
-                                               "merkando.de", "make.tv",
-                                               "ferien-touristik.de","dailyme.de"),
-                                    selected = "spotted.de")
+                        radioButtons(inputId = "city", 
+                                     label = "Select a city:", 
+                                     choices = c("Cologne", "Berlin"), 
+                                     selected = "Cologne")
                 ),
                 
                 wellPanel(
@@ -64,7 +55,7 @@ shinyUI(fluidPage(
                 ),
 
                 wellPanel(
-                        numericInput("ahead", "Days to forecast ahead:", 30)
+                        numericInput("ahead", "Years to forecast ahead:", 15)
                 ),
                 
 ############################### ~~~~~~~~~~~~~~~~~ ##############################                
@@ -90,12 +81,7 @@ shinyUI(fluidPage(
                         tabPanel("Model Plot", 
                                  plotOutput("fmplot"),
                                  tags$strong(textOutput("caption1"), 
-                                          align = "center"),
-                                 tags$div("Historical Data: Alexa.com | Metric: 
-                                 Alexa Traffic Rank - Global", align="center",
-                                 br(),
-                                 "Forecast based on data from 
-                                 27.06.2014 - 21.12.2014")),
+                                          align = "center")),
                         
                         tabPanel("Forecasting Data",
                                  tags$div(textOutput("caption2"), 
@@ -110,10 +96,34 @@ shinyUI(fluidPage(
                                  textOutput("caption3"),
                                  tags$hr(),
                                  plotOutput("Ndcomp"),
-                                 (textOutput("caption4")),
-                                 tags$hr()),
+                                 (textOutput("caption4"))),
                         
-                        tabPanel("Explanations", includeMarkdown("models.md"))
+                        tabPanel("Info",
+                                p("Author website:"),
+                                tags$a(href="http://nierhoff.info", 
+                                       "http://nierhoff.info"),
+                                tags$hr(),
+                                tags$br(),
+                                p("Code of this app:"), 
+                                tags$a(href="https://github.com/mhnierhoff/FMWT",
+                                       "https://github.com/mhnierhoff/FMWT"),
+                                tags$hr(),
+                                tags$br(),
+                                p("Data sources:"),
+                                tags$a(
+                                        href="http://de.wikipedia.org/wiki/Einwohnerentwicklung_von_K%C3%B6ln", 
+                                        "Cologne"),
+                                tags$br(),
+                                tags$a(
+                                        href="http://de.wikipedia.org/wiki/Einwohnerentwicklung_von_Berlin", 
+                                       "Berlin"),
+                                tags$hr(),
+                                tags$br(),
+                                p("This application is primarily a demo to show what is possible. 
+                                In favor of the ease of use of this app, the individual models may 
+                                not be maximally accurate. In case of any questions related to this 
+                                application, feel free to write me a mail.")
+                                )
                 ),
         
         width = 6)

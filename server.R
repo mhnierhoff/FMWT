@@ -31,21 +31,9 @@ shinyServer(function(input, output, session) {
 ## Getting the data for the websites         
 
         getDataset <- reactive({
-                switch(input$page,
-                       "spotted.de" = alexaTrafficRank[,2],
-                       "meckr.net" = alexaTrafficRank[,3],
-                       "womenweb.de" = alexaTrafficRank[,4],
-                       "kochrezepte.de" = alexaTrafficRank[,5],
-                       "spontacts.com" = alexaTrafficRank[,6],
-                       "autoinfo.de" = alexaTrafficRank[,7],
-                       "hoccer.com" = alexaTrafficRank[,8],
-                       "einfachlotto.de" = alexaTrafficRank[,9],
-                       "yasni.de" = alexaTrafficRank[,10],
-                       "tape.tv" = alexaTrafficRank[,11],
-                       "merkando.de" = alexaTrafficRank[,12],
-                       "make.tv" = alexaTrafficRank[,13],
-                       "ferien-touristik.de" = alexaTrafficRank[,14],
-                       "dailyme.de" = alexaTrafficRank[,15])
+                switch(input$city,
+                       "Cologne" = cologne,
+                       "Berlin" = berlin)
                 
         })
 
@@ -75,24 +63,24 @@ shinyServer(function(input, output, session) {
         
 
         output$caption1 <- renderText({
-                paste("The web traffic of", input$page, "with", 
+                paste("The data of", input$city, "with the", 
                       input$model, "forecasting model.")
         })
         
         output$caption2 <- renderText({
                 paste("The data of the forecasted next", input$ahead, 
-                      "days of the website", input$page, "with the", 
+                      "years of", input$city, "with the", 
                       input$model, "forecasting model.")
         })
 
         output$caption3 <- renderText({
-                paste("The web traffic of", input$page, 
+                paste("The data of", input$city, 
                       "decomposed into seasonal, trend and irregular components 
                       using loess (acronym STL).")
         })
 
         output$caption4 <- renderText({
-                paste("The web traffic of", input$page, 
+                paste("The data of", input$city, 
                       "into seasonal, trend and irregular components using 
                       moving averages.The additive model uses the following 
                       formula: Y[t] = T[t] + S[t] + e[t]")
@@ -135,12 +123,7 @@ shinyServer(function(input, output, session) {
            
         plotInput <- function() {
                 x <- forecast(getModel(), h=input$ahead)
-                plot(x, flty = 3, axes = FALSE)
-                a <- seq(as.Date(aTR$Date, format = "%d.%m.%y")[1] + 1, 
-                         by = "months", length = length(date) + 11)
-                axis(1, at = as.numeric(a)/365.3 + 1970, 
-                     labels = format(a, format = "%d/%m/%Y"), cex.axis = 0.9)
-                axis(2, cex.axis = 0.9, las = 2)
+                plot(x, flty = 3)
         }
         
         output$fmplot <- renderPlot({
@@ -169,10 +152,7 @@ shinyServer(function(input, output, session) {
                         # Pause for 0.1 seconds to simulate a long computation.
                         Sys.sleep(0.1)
                 }
-                
-                
-                #plotInput()
-                
+
         })
 
 ############################### ~~~~~~~~~~~~~~~~~ ##############################
@@ -217,8 +197,8 @@ shinyServer(function(input, output, session) {
 
         output$downloadPlot <- downloadHandler(
                 filename = function() { 
-                        paste(input$page, input$model,"Traffic-Forecasting",
-                              Sys.Date(),sep="-", ".pdf") 
+                        paste(input$city, "with", input$model,"Forecasting",
+                              "-", Sys.Date(), ".pdf") 
                         },
                 content <- function(file) {
                         pdf(file)
