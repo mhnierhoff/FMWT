@@ -1,4 +1,4 @@
 FMWT
 ====
 
-Forecasting App
+Forecasting App - Demo
