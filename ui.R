@@ -66,6 +66,7 @@ shinyUI(fluidPage(
                         p("By clicking on the button a plot of the selected 
                           forecasting model and both decomposition plots can 
                           be downloaded."),
+                tags$hr(),
                 tags$div(downloadButton("downloadPlot", "Download Model Plot"),
                          align = "center"),
                 
